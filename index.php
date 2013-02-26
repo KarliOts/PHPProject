@@ -17,7 +17,7 @@
         leht = $(".active").text();
           $.post('alamlehed/valiLeht.php',{leht: leht},function(andmed){
             $('.search_input').html(andmed);
-          });
+          }); 
           
     		$("li").click(function(){
     			$("li").removeClass("active");
