@@ -11,7 +11,7 @@
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
     <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/logi_register.js"></script>
+    <script src="js/logi_register.js"> </script>
     <script type="text/javascript">
     	$(document).ready(function(){
         leht = $(".active").text();
