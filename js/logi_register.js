@@ -11,6 +11,7 @@ $('#sisene').live('submit', function(){
 	});
 	return false; 
 });
+//kommentaarid puudu
 $('#register').live('submit', function(){
 	r_username = $('.r_username').val();
 	r_password = $('.r_password').val();
