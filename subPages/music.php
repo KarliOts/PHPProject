@@ -7,7 +7,7 @@ if(isset($_POST['search'])){
 	$number = count($databaseData->searchFromYoutube($_POST['search']));
 	echo '<div class="span6 vids">';
 	for($i=0; $i<$number; $i++){
-		echo '<button class="span8 btn btn-large videoLink" value="'.$songsFound[$i]['url'].'">';
+		echo '<button class="span6 btn btn-large videoLink" value="'.$songsFound[$i]['url'].'">';
 		if(preg_match('/\b(mqdefault.jpg)\b/', $songsFound[$i]['img'])){
 			echo '<img class="thumb pull-left" src="'.$songsFound[$i]['img'].'"></img>';
 		} else {

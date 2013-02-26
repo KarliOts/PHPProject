@@ -28,7 +28,7 @@
       <a href="#">Tutvu</a>
     </div>
       
-    <div class="span8 well videoList">
+    <div class="span6 well videoList">
       <form id="searchEngine">
         <input type="text" class="input-large span8 keyword" placeholder="Otsi... (ENTER)">
       </form>
