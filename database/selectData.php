@@ -9,6 +9,7 @@ class databaseConnection {
 	private $D_database;
 	private $connect;
 	private $loginUserID;
+
 	//building and setting up connection to database
 	function __construct($host, $user, $pass, $data, $loginUser) {
 		$this->D_hostname = $host;
@@ -18,17 +19,22 @@ class databaseConnection {
 		$this->loginUserID = $loginUser;
 		databaseConnection::makeConnectionToDatabase();
 	}
+
 	//connecting to database
 	public function makeConnectionToDatabase() {
 		$connection = new mysqli($this->D_hostname, $this->D_username, $this->D_password, $this->D_database) or die (databaseConnection::showErrorMessage("Cant connect to database."));
 		$connection->query('SET NAMES utf8');
 		$this->connect = $connection;
 	}
+	
 	//selecting all users from database
 	public function selectUsers() {
-		$selectUser = $this->connect->prepare("SELECT * FROM kasutajad") or die (databaseConnection::showErrorMessage("Cannot open table kasutajad from database."));
+		$selectUser = $this->connect->prepare("SELECT * FROM users") or die (databaseConnection::showErrorMessage("Cannot open table users from database."));
 		$selectUser->bind_result($id, $username, $password, $email, $firstname, $lastname);
 		$selectUser->execute();
+		$websiteUserInformation = array();
+		$websiteUsers = array();
+
 		while($selectUser->fetch()){
 			$websiteUserInformation['id'] = $id;
 			$websiteUserInformation['usrname'] = $username;
@@ -40,14 +46,17 @@ class databaseConnection {
 		}
 		return $websiteUsers;
 	}
+
 	//selecting logged in user information
 	public function selectLoginUserInformation() {
-		$selectUser = $this->connect->prepare("SELECT * FROM kasutajad WHERE id='$this->loginUserID'") or die (databaseConnection::showErrorMessage("Cannot open table kasutajad from database."));
+		$selectUser = $this->connect->prepare("SELECT * FROM users WHERE id='$this->loginUserID'") or die (databaseConnection::showErrorMessage("Cannot open table users from database."));
 		$selectUser->bind_result($id, $username, $password, $email, $firstname, $lastname);
 		$selectUser->execute();
+		$websiteLoginUserInformation = array();
+
 		while($selectUser->fetch()){
 			$websiteLoginUserInformation['id'] = $id;
-			$websiteLoginUserInformation['usrname'] = $username;
+			$websiteLoginUserInformation['username'] = $username;
 			$websiteLoginUserInformation['password'] = $password;
 			$websiteLoginUserInformation['email'] = $email;
 			$websiteLoginUserInformation['firstname'] = $firstname;
@@ -55,11 +64,15 @@ class databaseConnection {
 		}
 		return $websiteLoginUserInformation;
 	}
+
 	//selecting logged in user playlists
 	public function selectLoginUserPlaylists() {
 		$selectUserPlaylist = $this->connect->prepare("SELECT * FROM playlists WHERE user_id='$this->loginUserID'") or die (databaseConnection::showErrorMessage("Cannot open table playlists from database."));
 		$selectUserPlaylist->bind_result($id, $playlistName, $userId);
 		$selectUserPlaylist->execute();
+		$websiteUserPlaylists = array();
+		$playlists = array();
+
 		while($selectUserPlaylist->fetch()){
 			$websiteUserPlaylists['id'] = $id;
 			$websiteUserPlaylists['playlistName'] = $playlistName;
@@ -68,11 +81,15 @@ class databaseConnection {
 		}
 		return $playlists;
 	}
+
 	//selecting logged in user friends
 	public function selectLoginUserFriends() {
-		$selectUserFriends = $this->connect->prepare("SELECT kasutajad.id, kasutajad.username FROM kasutajad, friends WHERE kasutajad.id=friends.friend_id AND friends.user_id='$this->loginUserID'") or die (databaseConnection::showErrorMessage("Cannot open table kasutajad and friends from database."));
+		$selectUserFriends = $this->connect->prepare("SELECT users.id, users.username FROM users, friends WHERE users.id=friends.friend_id AND friends.user_id='$this->loginUserID'") or die (databaseConnection::showErrorMessage("Cannot open table users and friends from database."));
 		$selectUserFriends->bind_result($id, $username);
 		$selectUserFriends->execute();
+		$loginUserFriend = array();
+		$friend = array(); 
+
 		while($selectUserFriends->fetch()){
 			$loginUserFriend['id'] = $id;
 			$loginUserFriend['username'] = $username;
@@ -80,11 +97,15 @@ class databaseConnection {
 		}
 		return $friend;
 	}
+
 	//selecting logged in user choosed playlist content
 	public function selectLoginUserPlaylistContent($playlistId){
 		$selectPlaylistContent = $this->connect->prepare("SELECT playlists.id, songs_in_playlist.song_url FROM playlists, songs_in_playlist WHERE playlists.id = songs_in_playlist.playlist_id AND playlists.user_id ='$this->loginUserID' AND playlists.id = '$playlistId'") or die (databaseConnection::showErrorMessage("Cannot open table playlist and songs_in_playlist from database."));
 		$selectPlaylistContent->bind_result($id, $songUrl);
 		$selectPlaylistContent->execute();
+		$playlistSongs = array();
+		$songs = array();
+
 		while ($selectPlaylistContent->fetch()) {
 			$playlistSongs['id'] = $id;
 			$playlistSongs['songUrl'] = $songUrl;
@@ -92,11 +113,15 @@ class databaseConnection {
 		}
 		return $songs;
 	}
+
 	//selecting website homepage content
 	public function selectHomepageContent(){
 		$websiteContent = $this->connect->prepare("SELECT * FROM w_homepage");
 		$websiteContent->bind_result($id, $heading, $text, $date);
 		$websiteContent->execute();
+		$content = array();
+		$homepageContent = array();
+
 		while ($websiteContent->fetch()) {
 			$content['id'] = $id;
 			$content['heading'] = $heading;
@@ -106,64 +131,68 @@ class databaseConnection {
 		}
 		return $homepageContent;
 	}
-	//searching from youtube
-	public function searchFromYoutube($searchKeyWord){
-		$searchedKeyWord = preg_replace("/ /", "//+/", $searchKeyWord);
-		$html = file_get_contents("http://www.youtube.com/results?search_query=$searchedKeyWord");
-		$videoTitle = explode('<div class="yt-lockup2-thumbnail">', $html);
-		
-		for($j = 1; $j < 19; $j++){
-			$dom = new DOMDocument();
-			@$dom->loadHTML($videoTitle[$j]);
-			$a = $dom->getElementsByTagName('a');
-			$vimg = $dom->getElementsByTagName('img');
-			
-				$title = array();
-				$attr = array();
-				$img = array();
-				$img2 = array();
-			
-			for ($i=0; $i < $a->length; $i++) {
-				$attr[] = $a->item($i)->getAttribute('href'); 
-				$title[] = $a->item($i)->textContent;
-			}
-			for ($i=0; $i < $vimg->length; $i++) {
-				$img[] = $vimg->item($i)->getAttribute('src');
-			}
-			for ($l=0; $l < $vimg->length; $l++) {
-				$img2[] = $vimg->item($l)->getAttribute('data-thumb'); 
-			}
-
-			if(empty($attr[1]) || empty($title[1])){ 
-				echo "";
-			} else {
-				$Stitle = explode(' ', $title[1]);
-				$substr = "";
-				foreach ($Stitle  as $current) {
-					if (strlen($substr) >= 65) { break; }
-			    	$substr .= $current . ' ';
-				}
-				$location = explode("=",$attr[1]);
-				
-				if(!empty($location[1])){
-					$songInformation['name'] = $substr;
-					$songInformation['url'] = $location[1];
-					$songInformation['img'] = $img[0];
-					$songInformation['img2'] = $img2[0];
-					$searchedSongInformation[] = $songInformation; 
-				}			
-			}
+	
+	//selects certain song from playlist if it exists
+	public function searchSongFromUserPlaylist($songUrl, $playlistId){
+		$searchSongFromPlaylist = $this->connect->prepare("SELECT playlist_id FROM songs_in_playlist WHERE song_url='$songUrl' AND playlist_id='$playlistId'");
+		$searchSongFromPlaylist->bind_result($playlistId);
+		$searchSongFromPlaylist->execute();
+		if ($searchSongFromPlaylist->fetch()) {
+			$songLocation = $playlistId;
+			return $songLocation;
+		} else {
+			return 0;
 		}
-		return $searchedSongInformation;
 	}
+
+	//selecting playlist name that has certain song
+	public function playlistName($id){
+		$playlistName = $this->connect->prepare("SELECT playlist_name FROM playlists WHERE id='$id'");
+		$playlistName->bind_result($name);
+		$playlistName->execute();
+		if ($playlistName->fetch()) {
+			return $name;
+		}
+	}
+
+	//searches certain song from playlists
+	public function checkSong($songUrl, $playlistId){
+		$check = $this->connect->prepare("SELECT playlist_id FROM songs_in_playlist WHERE song_url='$songUrl' AND playlist_id='$playlistId'");
+		$check->bind_result($id);
+		$check->execute();
+		if ($check->fetch()) {
+			return $id;
+		} else { return 0; }
+	}
+
+	//selects all logged in user added "Listen later songs" max 5 songs per user
+	public function userListenLaterSongs(){
+		$listenlater = $this->connect->prepare("SELECT * FROM listenlater WHERE user_id='$this->loginUserID'");
+		$listenlater->bind_result($id, $user_id, $song_id);
+		$listenlater->execute();
+		$laterSongs = array();
+		$selectAllLaterSongs = array();
+		while($listenlater->fetch()){
+			$laterSongs['id'] = $id;
+			$laterSongs['songId'] = $song_id;
+			$selectAllLaterSongs[] = $laterSongs;
+		}
+		return $selectAllLaterSongs;
+	}
+
+	//closing database connection
+	public function closeConnection () {
+		$this->connect->close();
+	}
+	
 	//if any errors, this function will display it
 	public function showErrorMessage($errorMessage) {
 		echo $errorMessage;
 		die();
 	}
 }
-/*number 1, the last variable passed to class is logged in user id*/
-$databaseData = new databaseConnection('127.0.0.1','karli','Ametik00l','karli','1');
+/*last variable passed to class is logged in user id*/
+$databaseData = new databaseConnection('127.0.0.1','root','','karli', $_SESSION['user']);
 
 /*selects all users from website*/
 //print_r($databaseData->selectUsers());
