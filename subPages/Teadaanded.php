@@ -165,5 +165,7 @@
   </div>
   <div class="music_notify modal-body"></div>
 
-  <div class="modal-footer"></div>
+  <div class="alert alert-danger pull-left">
+      Palun aken sulgeda ristist!
+  </div>
 </div>

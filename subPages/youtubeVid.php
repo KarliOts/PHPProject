@@ -1,8 +1,8 @@
+<script type="text/javascript" src="js/jquery.js"></script>
 <?php
 	//including useful classes and scripts
 	include_once '../database/selectData.php';
 	include_once '../database/countData.php';
-	echo '<script type="text/javascript" src="js/jquery.js"></script>';
 	
 	//counting if later listen songs playlist is full, max 5 songs
 	if ($countUserData->countUserListenLaterSongs() < 5) {

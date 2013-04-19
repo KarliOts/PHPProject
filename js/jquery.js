@@ -20,6 +20,10 @@ $(document).ready(function(){
 					$('.music_notify').html(data);
 				});
 			});
+                            //clearing mdal after closing it
+                            $('.close').click(function(){
+                                $('.music_notify').html('');
+                            });
 			//removing recocommended song from database
 			$('.eemalda').click(function(){
 				songUrl = $(this).val();
