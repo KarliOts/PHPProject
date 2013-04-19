@@ -11,10 +11,11 @@
     <title>Youtube music player</title>
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
-    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.js"></script>
-    <script src="js/logi_register.js"></script>
+    <!--<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.js"></script>-->
+    <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/logi_register.js"></script>
     <style type="text/css"> .navbarTwo{ margin-top: 40px; } .terveSisu{ margin-top: 50px; }</style>
   </head>
   <body>
@@ -24,10 +25,7 @@
         <div class="container">
           <a href="index.php" class="brand">Youtube music player</a>
             <ul class="nav pull-right">
-              <li class="headerMenu"><a class="headMenu" href="avaleht">Avaleht</a></li>
-              <?php if($_SESSION['user'] == '') { ?>
-                <li class="headerMenu"><a class="headMenu" href="sisene">Sisene</a></li>
-              <?php } else { ?>
+              <?php if($_SESSION['user'] != '') { ?>
                 <li class="headerMenu"><a class="headMenu" href="lahku">Lahku</a></li>
               <?php } ?>
             </ul>

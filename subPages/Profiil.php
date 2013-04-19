@@ -55,7 +55,7 @@
 			<div class="control-group info">
 				<div class="controls">
 				  	<label class="control-label">Kasutajanimi: </label>
-				    <input type="text" class="triggerPopover" id="updateUsername" value="<?=$USERNAME;?>" 
+				    <input type="text" class="triggerPopover" disabled="disabled" id="updateUsername" value="<?=$USERNAME;?>" 
 				    data-original-title="Kasutajanimi vahemikus 6-20 tähemärki" />
 
 				    <label class="control-label">Email: </label>

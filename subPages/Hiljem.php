@@ -8,15 +8,12 @@
 		$videoTitle[$i] = $databaseData->userListenLaterSongs()[$i]['songId'];
 		$yUrl = $databaseData->userListenLaterSongs()[$i]['songId'];
 		$sId = $databaseData->userListenLaterSongs()[$i]['id'];
-
-		$url = "http://gdata.youtube.com/feeds/api/videos/". $videoTitle[$i];
-    	$doc = new DOMDocument;
-    	$doc->load($url);
-    	$title = $doc->getElementsByTagName("title")->item(0)->nodeValue;
-    	
+		
+		//getting video title using json and putting information them into array 
+		$json = json_decode(file_get_contents("http://gdata.youtube.com/feeds/api/videos/".$videoTitle[$i]."?v=2&prettyprint=true&alt=jsonc"));	
     	$titles[$i]['id'] = $sId;
     	$titles[$i]['yUrl'] = $yUrl;
-    	$titles[$i]['title'] = $title;
+    	$titles[$i]['title'] = $json->data->title;
 	}
 	echo '
 		<table class=" well table table-hover table-condensed table-striped span9">

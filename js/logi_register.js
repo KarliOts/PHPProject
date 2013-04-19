@@ -4,7 +4,7 @@ $('#sisene').live('submit', function(){
 	
 	$.post('subPages/login.php', {username: username, password: password, choose: "login"}, function(succ_fail){
 		if(succ_fail == "ERROR"){
-			$('.loginmessage').text("Kasutajanimi või parool valesti");
+			$('.loginmessage').show().text("Kasutajanimi või parool valesti");
 		} else {
 			window.location.reload();
 		};
@@ -29,7 +29,7 @@ $('#register').live('submit', function(){
 		email: email,
 		choose: "register"
 	}, function(succ_fail){
-		$('.registermessage').html(succ_fail);
+		$('.registermessage').show().html(succ_fail);
 	});
 	return false; 
 });

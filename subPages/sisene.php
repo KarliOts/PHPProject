@@ -1,5 +1,5 @@
 <link rel="stylesheet" type="text/css" href="css/homeStyle.css" />
-<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
 
 <div class="row terveSisu">
     <div class="span8">
@@ -23,7 +23,7 @@
             &nbsp;<button type="submit" class="btn btn-small btn-primary">Sisene</button>
             &nbsp;<h6>Pole kontot <a class="toggle-register" href="#">Registreeru</a></h6>
             </form>
-            <div class="loginmessage"></div>
+            <div class="alert alert-danger loginmessage"></div>
         </div>
 
         <div class="register well">
@@ -37,7 +37,7 @@
             &nbsp;<button type="submit" class="btn btn-small btn-primary">Registreeru</button>
             </form>
 
-            <div class="registermessage"></div>
+            <div class="alert alert-danger registermessage"></div>
         </div>
     </div>
 </div>

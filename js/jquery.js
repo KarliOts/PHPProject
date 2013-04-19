@@ -1,4 +1,32 @@
 $(document).ready(function(){
+	//hiding login and register error message div elements
+	$('.loginmessage').hide();
+	$('.registermessage').hide();
+
+		/*DEALING WITH USER NOTIFICATIONS INCLUDING FRIENDS*/
+			//accepting friend requests
+			$('.kinnita').click(function(){
+				friendId = $(this).val();
+				$.post('database/updateData.php', {friendId: friendId, notify: 'accept'}, function(data){
+					alert(data);
+				});
+			});
+
+			//listening reccommended music
+			$('.kuula').click(function(){
+				songUrl = $(this).val();
+                                $('#notifications').modal('show');
+				$.post('subPages/youtubeVid.php', {songUrl: songUrl}, function(data){
+					$('.music_notify').html(data);
+				});
+			});
+			//removing recocommended song from database
+			$('.eemalda').click(function(){
+				songUrl = $(this).val();
+				/*$.post('database/youtubeVid.php', {songUrl: songUrl}, function(data){
+					alert(data);
+				});*/
+			});
 
 	//profiili lehel input-ide tooltip
 	$('.triggerPopover').tooltip({'trigger':'focus', 'placement': 'right'});

@@ -46,6 +46,10 @@
 
 		//lets check all user entered information
 		public function checkingUserInformation () {
+			//checking if any inputs empty
+			if ($this->Remail == '' || $this->Rusername == '' || $this->Rpassword == '' || $this->Rpassword_control == '' || $this->Rfirstname == '' || $this->Rlastname == '') {
+				userRegister::errorMessage('Täida kõik väljad!');
+			}
 			//checking username length
 			if ((strlen($this->Rusername) > 20) || (strlen($this->Rusername) < 6)) {
 				userRegister::errorMessage('Kasutajanimi peab olema vahemikus 6 - 20 tähemärki!');
@@ -138,6 +142,7 @@
 		$userRegister = new userRegister('127.0.0.1', 'root', '', 'karli');
 		$userRegister->getUserInformation($_POST['username'], $_POST['password'], $_POST['password_control'], $_POST['firstname'], $_POST['lastname'], $_POST['email']);
 		$userRegister->createUserPlaylists($userRegister->getUserIdForCreatingPlaylists());
+		$userRegister->closeConnection();
 	} else {
 		header('Location: ../index.php');
 	}

@@ -31,10 +31,23 @@
 	echo '
 		<div class="input-append showPlaylists">
 			<span class="add-on">Playlistid</span>';
-			for ($i=0; $i<3; $i++) { $disabled = ''; $red = ''; $checked = '';
-				if ($databaseData->checkSong($_POST["songUrl"], $playlist[$i]) == $playlist[$i]) { $checked = 'badge-success'; $disabled = 'disabled="disabled"'; }
-				if ($countUserData->countUserSongsInPlaylists($playlist[$i]) >= 30) { $disabled = 'disabled="disabled"'; $red = 'btn-danger'; }
-				echo '<button class="btn click '.$red.'" '.$disabled.' value="'.$playlist[$i].'">'.$databaseData->selectLoginUserPlaylists()[$i]['playlistName'].' <span class="badge '.$checked.'">'.$countUserData->countUserSongsInPlaylists($playlist[$i]).'</span></button>';
+			for ($i=0; $i<3; $i++) { 
+				$disabled = ''; 
+				$red = '';
+				$checked = '';
+					if ($databaseData->checkSong($_POST["songUrl"], $playlist[$i]) == $playlist[$i]) { 
+						$checked = 'badge-success'; 
+						$disabled = 'disabled="disabled"'; 
+					}
+					if ($countUserData->countUserSongsInPlaylists($playlist[$i]) >= 30) { 
+						$disabled = 'disabled="disabled"'; 
+						$red = 'btn-danger'; 
+					}
+				echo '<button class="btn click '.$red.'" '.$disabled.' value="'.$playlist[$i].'">'
+				.$databaseData->selectLoginUserPlaylists()[$i]['playlistName'].
+				' <span class="badge '.$checked.'">'
+				.$countUserData->countUserSongsInPlaylists($playlist[$i]).
+				'</span></button>';
 			}
 	echo '</div>';
 ?>

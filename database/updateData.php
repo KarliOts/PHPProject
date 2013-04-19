@@ -39,8 +39,6 @@
 			$this->_D_NAME = $data;
 
 			$this->_LOGGED_IN_USER = $userId;
-
-			updateDatabaseInformation::validateInformation();
 		}
 
 		//check if user entered information is valid
@@ -52,8 +50,6 @@
 			if (!preg_match('/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*(\.[a-z]{2,3})$/', $this->_EMAIL)) {
 				updateDatabaseInformation::returnMessage("vale email! ");
 			}
-
-			updateDatabaseInformation::removeAnyScript();
 		}
 
 		//removing possible scripts from user entered information
@@ -62,16 +58,12 @@
 			$this->_FIRSTNAME = htmlspecialchars($this->_FIRSTNAME);
 			$this->_LASTNAME = htmlspecialchars($this->_LASTNAME);
 			$this->_EMAIL = htmlspecialchars($this->_EMAIL);
-
-			updateDatabaseInformation::buildConnection();
 		}
 
 		//making connection to database
 		public function buildConnection () {
 			$this->_CONNECTION = new mysqli($this->_D_HOST, $this->_D_USER, $this->_D_PASS, $this->_D_NAME) or die (mysql_error());
 			$this->_CONNECTION->query('SET NAMES utf8');
-
-			updateDatabaseInformation::updateInformation();
 		}
 
 		//updating logged in user information in database
@@ -80,7 +72,25 @@
 			$update->execute();
 		}
 
-		//displays message back to user, only error-s
+		//logged in user have seen frien request
+		public function seenFriendRequest ($friendId) {
+			$updateRequest = $this->_CONNECTION->prepare("UPDATE notifications SET done_or_not=1 WHERE user_id='$friendId' AND friend_id='$this->_LOGGED_IN_USER' AND notification='FRIEND'")or die(mysql_error());
+			$updateRequest->execute();
+		}
+
+		//adding user to friends list after accepting request
+		public function addUserToFriendList ($friendId) {
+			$addUser = $this->_CONNECTION->prepare("INSERT INTO friends (user_id, friend_id) VALUES ('$this->_LOGGED_IN_USER','$friendId')")or die(mysql_error());
+			$addUser->execute();
+			updateDatabaseInformation::returnMessage('Lisatud tuttavate listi!');
+		}
+
+		//closing database connection
+		public function closeConnection () {
+			$this->_CONNECTION->close();
+		}
+
+		//displays message back to user, in case any errors should occur, page will die after going into this function
 		public function returnMessage ($message) {
 			echo $message;
 			die();
@@ -88,4 +98,21 @@
 	}
 
 	$updateDatabaseInformation = new updateDatabaseInformation('127.0.0.1','root','','karli', $_SESSION['user']);
+	
+	if ($_POST['updateFirstname'] != '') {
+		$updateDatabaseInformation->validateInformation();
+		$updateDatabaseInformation->removeAnyScript();
+		$updateDatabaseInformation->buildConnection();
+		$updateDatabaseInformation->updateInformation();
+		$updateDatabaseInformation->closeConnection();
+	}
+
+	if (isset($_POST['notify'])) {
+		if ($_POST['notify'] == 'accept') {
+			$updateDatabaseInformation->buildConnection();
+			$updateDatabaseInformation->seenFriendRequest($_POST['friendId']);
+			$updateDatabaseInformation->addUserToFriendList($_POST['friendId']);
+			$updateDatabaseInformation->closeConnection();
+		}
+	}
 ?>
