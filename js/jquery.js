@@ -20,10 +20,11 @@ $(document).ready(function(){
 					$('.music_notify').html(data);
 				});
 			});
-                            //clearing mdal after closing it
+                            //clearing modal after closing it
                             $('.close').click(function(){
                                 $('.music_notify').html('');
                             });
+                        
 			//removing recocommended song from database
 			$('.eemalda').click(function(){
 				songUrl = $(this).val();
@@ -108,31 +109,6 @@ $(document).ready(function(){
 		}
 		return false;
 	});
-	
-	//shows playlist adding buttons
-	$('.addToPlaylist').click(function(){
-		$('.showPlaylists').show();
-	});
-	
-	//soovitab laulu tuttavale
-	$('.recommend').click(function(){
-		videoUrl = $(this).val();
-		$.post('database/insertData.php', {choice: 'recommend', videoUrl: videoUrl}, function(success){
-			alert(success);
-		});
-
-	});
-
-	//lisab laulu hiljem kuulatavate laulude list
-	$('.listenLater').click(function(){
-		videoUrl = $(this).val();
-		$.post('database/insertData.php', {choice: 'later', videoUrl: videoUrl}, function(success){
-			$('.listenLater').attr('disabled', 'disabled');
-		});
-	});
-
-	//hides playlist name buttons
-	$('.showPlaylists').hide();
 
 	//selecting playlist where song is going to added
 	$('.click').click(function(){

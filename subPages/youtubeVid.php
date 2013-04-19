@@ -1,4 +1,25 @@
-<script type="text/javascript" src="js/jquery.js"></script> 
+<script type="text/javascript">
+//shows playlist adding buttons
+    $('.showPlaylists').hide();
+    $('.addToPlaylist').click(function(){
+	$('.showPlaylists').show();
+    });
+//soovitab laulu tuttavale
+    $('.recommend').click(function(){
+	videoUrl = $(this).val();
+	$.post('database/insertData.php', {choice: 'recommend', videoUrl: videoUrl}, function(success){
+		alert(success);
+	});
+
+    });
+//lisab laulu hiljem kuulatavate laulude list
+    $('.listenLater').click(function(){
+	videoUrl = $(this).val();
+	$.post('database/insertData.php', {choice: 'later', videoUrl: videoUrl}, function(success){
+		$('.listenLater').attr('disabled', 'disabled');
+	});
+    });
+</script> 
 <?php
 	//including useful classes and scripts
 	include_once '../database/selectData.php';
