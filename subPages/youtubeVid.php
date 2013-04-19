@@ -1,4 +1,4 @@
-<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script> 
 <?php
 	//including useful classes and scripts
 	include_once '../database/selectData.php';
