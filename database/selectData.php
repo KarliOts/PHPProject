@@ -100,8 +100,8 @@ class databaseConnection {
 
 	//selecting logged in user choosed playlist content
 	public function selectLoginUserPlaylistContent($playlistId){
-		$selectPlaylistContent = $this->connect->prepare("SELECT playlists.id, songs_in_playlist.song_url FROM playlists, songs_in_playlist WHERE playlists.id = songs_in_playlist.playlist_id AND playlists.user_id ='$this->loginUserID' AND playlists.id = '$playlistId'") or die (databaseConnection::showErrorMessage("Cannot open table playlist and songs_in_playlist from database."));
-		$selectPlaylistContent->bind_result($id, $songUrl);
+		$selectPlaylistContent = $this->connect->prepare("SELECT playlists.id, songs_in_playlist.song_url, songs_in_playlist.song_name FROM playlists, songs_in_playlist WHERE playlists.id = songs_in_playlist.playlist_id AND playlists.user_id ='$this->loginUserID' AND playlists.id = '$playlistId'") or die (databaseConnection::showErrorMessage("Cannot open table playlist and songs_in_playlist from database."));
+		$selectPlaylistContent->bind_result($id, $songUrl, $songName);
 		$selectPlaylistContent->execute();
 		$playlistSongs = array();
 		$songs = array();
@@ -109,6 +109,7 @@ class databaseConnection {
 		while ($selectPlaylistContent->fetch()) {
 			$playlistSongs['id'] = $id;
 			$playlistSongs['songUrl'] = $songUrl;
+                        $playlistSongs['songName'] = $songName;
 			$songs[] = $playlistSongs;
 		}
 		return $songs;
@@ -168,13 +169,14 @@ class databaseConnection {
 	//selects all logged in user added "Listen later songs" max 5 songs per user
 	public function userListenLaterSongs(){
 		$listenlater = $this->connect->prepare("SELECT * FROM listenlater WHERE user_id='$this->loginUserID'");
-		$listenlater->bind_result($id, $user_id, $song_name, $song_id);
+		$listenlater->bind_result($id, $user_id, $song_name, $song_url);
 		$listenlater->execute();
 		$laterSongs = array();
 		$selectAllLaterSongs = array();
 		while($listenlater->fetch()){
 			$laterSongs['id'] = $id;
-			$laterSongs['songId'] = $song_id;
+			$laterSongs['songUrl'] = $song_url;
+                        $laterSongs['songName'] = $song_name;
 			$selectAllLaterSongs[] = $laterSongs;
 		}
 		return $selectAllLaterSongs;

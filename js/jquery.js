@@ -15,8 +15,9 @@ $(document).ready(function(){
 			//listening reccommended music
 			$('.kuula').click(function(){
 				songUrl = $(this).val();
+                                songName = $('.songName').text();
                                 $('#notifications').modal('show');
-				$.post('subPages/youtubeVid.php', {songUrl: songUrl}, function(data){
+				$.post('subPages/youtubeVid.php', {songUrl: songUrl, songName: songName}, function(data){
 					$('.music_notify').html(data);
 				});
 			});
@@ -79,7 +80,8 @@ $(document).ready(function(){
 	autoplay võrdne 1-ga, mis tähendab seda, et laul hakkab automaatselt mängima*/
 	$('.videoLink').click(function(){
 		vidLink = $(this).val();
-		$.post('subPages/youtubeVid.php', {songUrl: vidLink}, function(video){
+                songName = $('.songName', this).text();
+		$.post('subPages/youtubeVid.php', {songUrl: vidLink, songName: songName}, function(video){
 			$('.videoFrame').html(video);
 		});
 		return false;
@@ -114,14 +116,5 @@ $(document).ready(function(){
 			window.location.reload();
 		}
 		return false;
-	});
-
-	//selecting playlist where song is going to added
-	$('.click').click(function(){
-		videoUrl = $('.addToPlaylist').val();
-		playlistId = $(this).val();
-		$.post('database/insertData.php', {choice: 'playlist', videoUrl: videoUrl, playlistId: playlistId}, function(success){
-			$('.showPlaylists').hide();
-		});
 	});
 });

@@ -52,7 +52,7 @@
                                     echo '<img src="profileImages/anonymous.jpg" class="img-polaroid pull-left" >';
                                 }
                                 echo '<h4 style="margin-left:120px"><small>Kasutajanimi: <b>'.$username.'</b></small></h4>';
-                                echo '<h4 style="margin-left:120px"><small>Ees ja perenimi: : <b>'.$firstname.' '.$lastname.'</b></small></h4>';
+                                echo '<h4 style="margin-left:120px"><small>Ees ja perenimi: <b>'.$firstname.' '.$lastname.'</b></small></h4>';
                                 echo '<button style="margin-left:10px" class="lisa_s6braks btn btn-small pull-left" value="'.$id.'">Lisa sõbralisti :) </button>';
                             echo "</div>";
                         } $connection->close();

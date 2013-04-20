@@ -7,15 +7,27 @@
 //soovitab laulu tuttavale
     $('.recommend').click(function(){
 	videoUrl = $(this).val();
-	$.post('database/insertData.php', {choice: 'recommend', videoUrl: videoUrl}, function(success){
+        songName = $('.choosedSongName').text();
+	$.post('database/insertData.php', {choice: 'recommend', videoUrl: videoUrl, songName: songName}, function(success){
 		alert(success);
 	});
     });
 //lisab laulu hiljem kuulatavate laulude list
     $('.listenLater').click(function(){
 	videoUrl = $(this).val();
-	$.post('database/insertData.php', {choice: 'later', videoUrl: videoUrl}, function(success){
+        songName = $('.choosedSongName').text();
+	$.post('database/insertData.php', {choice: 'later', videoUrl: videoUrl, songName: songName}, function(){
 		$('.listenLater').attr('disabled', 'disabled');
+	});
+    });
+//selecting playlist where song is going to added
+    $('.click').click(function(){
+	videoUrl = $('.addToPlaylist').val();
+	playlistId = $(this).val();
+        songName = $('.choosedSongName').text();
+	$.post('database/insertData.php', {choice: 'playlist', videoUrl: videoUrl, playlistId: playlistId, songName: songName}, function(){
+		$('.showPlaylists').hide();
+                $('.showPlaylists').attr('disabled', 'disabled');
 	});
     });
 </script> 
@@ -32,7 +44,8 @@
 	}
 
 	//showing buttons under the video that comes from youtube
-	echo '
+	echo '<h3><small class="choosedSongName">'.$_POST['songName'].'</small></h3>';
+        echo '
 		<iframe width="100%" height="300" src="http://www.youtube.com/embed/' . $_POST["songUrl"] . '?autoplay=1" frameborder="0" allowfullscreen ></iframe>
 		<div class="input-append ">
 			<span class="add-on">Menu</span>

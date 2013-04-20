@@ -1,5 +1,4 @@
 <style type="text/css"> img{ width: 20%; } .vids{ margin-left: -6px; } #image{ display: none; } img{ display: none; } .searchedFromYoutube{ height: 60px;}</style>
-<script src="js/jquery.js"></script>
 <?php
 error_reporting(E_ALL^E_NOTICE);
 session_start();
@@ -60,7 +59,7 @@ if(isset($_POST['search'])){
 					echo '
 						<div class="input-append input-pretend">
 							<button class="btn span5 searchedFromYoutube '.$checked.' vids videoLink" value="'.$location[1].'">
-								<p><h6 class=""> '.$substr.' </h6></p><p><small>';
+								<p><h6 class="songName"> '.$substr.' </h6></p><p><small>';
 									for ($i=0; $i<count($truePlaylistName);$i++){
 										echo ' '.$truePlaylistName[$i];
 									}

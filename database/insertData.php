@@ -34,14 +34,14 @@ class insertingDataToDatabase {
 	}
 
 	//adding song to logged is users selected plalist
-	public function addSongToPlaylist($selectedPlaylist, $selectedVideoUrl){
-		$insertSongToSelectedPlaylist = $this->connect->prepare("INSERT INTO songs_in_playlist (playlist_id, song_url)VALUES('$selectedPlaylist','$selectedVideoUrl')");
+	public function addSongToPlaylist($selectedPlaylist, $selectedVideoUrl, $selectedSongName){
+		$insertSongToSelectedPlaylist = $this->connect->prepare("INSERT INTO songs_in_playlist (playlist_id, song_name, song_url)VALUES('$selectedPlaylist', '$selectedSongName' ,'$selectedVideoUrl')");
 		$insertSongToSelectedPlaylist->execute();
 	}
 	
 	//adding videos to database that user doesnt want to listen right now, but wants to listen them later, maximum 5 videos 1 user
-	public function addVideoToListenLater($songUrl){
-		$insertVideoToListenLater = $this->connect->prepare("INSERT INTO listenlater (user_id, song_url)VALUES($this->loginUserID, '$songUrl')");
+	public function addVideoToListenLater($songUrl, $songName){
+		$insertVideoToListenLater = $this->connect->prepare("INSERT INTO listenlater (user_id, song_name, song_url)VALUES($this->loginUserID, '$songName', '$songUrl')");
 		$insertVideoToListenLater->execute();
         }
 
@@ -62,12 +62,13 @@ if (isset($_POST['choice'])) {
 	$TODO = $_POST['choice'];
 	if ($TODO == 'playlist') {
 		//inserting song to selected playlist max 30 song in 1 playlist
-		$insertData->addSongToPlaylist($_POST['playlistId'], $_POST['videoUrl']);
+		$insertData->addSongToPlaylist($_POST['playlistId'], $_POST['videoUrl'], $_POST['songName']);
 		$insertData->closeDatabaseConnection();
 	} else if ($TODO == 'recommend') {
-		
+		//recommending song to some of choosed friends
+                //echo $_POST['songName'].' '.$_POST['videoUrl'];
 	} else if ($TODO == 'later') {
-		$insertData->addVideoToListenLater($_POST['videoUrl']);
+		$insertData->addVideoToListenLater($_POST['videoUrl'], $_POST['songName']);
 		$insertData->closeDatabaseConnection();
         } else if ($TODO == 'friend') {
                 $insertData->addFriend($_POST['friendId']);

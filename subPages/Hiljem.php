@@ -2,18 +2,15 @@
 	session_start();
 	error_reporting(E_ALL ^ E_NOTICE);
 	include_once '/database/selectData.php';
+        include_once '/database/countData.php';
 	
 	//getting youtube video title
-	for ($i=0; $i<5; $i++){ 
-		$videoTitle[$i] = $databaseData->userListenLaterSongs()[$i]['songId'];
-		$yUrl = $databaseData->userListenLaterSongs()[$i]['songId'];
-		$sId = $databaseData->userListenLaterSongs()[$i]['id'];
-		
-		//getting video title using json and putting information them into array 
-		$json = json_decode(file_get_contents("http://gdata.youtube.com/feeds/api/videos/".$videoTitle[$i]."?v=2&prettyprint=true&alt=jsonc"));	
-    	$titles[$i]['id'] = $sId;
-    	$titles[$i]['yUrl'] = $yUrl;
-    	$titles[$i]['title'] = $json->data->title;
+        //counting videos
+        $songs = $countUserData->countUserListenLaterSongs();
+	for ($i=0; $i< $songs; $i++){ 
+            $titles[$i]['id'] = $databaseData->userListenLaterSongs()[$i]['id'];
+            $titles[$i]['yUrl'] = $databaseData->userListenLaterSongs()[$i]['songUrl'];
+            $titles[$i]['title'] = $databaseData->userListenLaterSongs()[$i]['songName'];
 	}
 	echo '
 		<table class=" well table table-hover table-condensed table-striped span9">

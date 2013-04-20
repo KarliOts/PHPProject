@@ -1,4 +1,4 @@
-<style type="text/css">.songUsername{ margin-top: 0;} #buttons{margin-top: 60px; } .notifications{ overflow: auto; height: 500px;} .oneSong{ margin-left: 0; margin-right: -35px;} .oneFriend{ margin-left: 0; margin-right: -35px;} .song{ margin-left: 0;} .friend{ margin-left: 0;} .song{ margin-left: 0;} img{ width: 100px; height: 80px;}</style>
+<style type="text/css">.songUsername{ margin-top: 0;} .notifications{ overflow: auto; height: 500px;} .oneSong{ margin-left: 0; margin-right: -35px;} .oneFriend{ margin-left: 0; margin-right: -35px;} .song{ margin-left: 0;} .friend{ margin-left: 0;} .song{ margin-left: 0;} img{ width: 100px; height: 80px;}</style>
 <ul class="nav nav-list span3 well">
     <li class="nav-header" >Teadaanded</li>
         <li><a class="tuttavad" href="index.php?leht=teadaanded&valik=tuttavad">Sõbrad</a></li>
@@ -67,7 +67,7 @@
                 $i = 0;
                 $j = 0;
                 $notification = $this->_CONNECTION->prepare("SELECT * FROM notifications WHERE friend_id='$this->userId'");
-                $notification->bind_result($id, $user_id, $notify, $friend_id, $done_or_not);
+                $notification->bind_result($id, $user_id, $notify, $song_name, $friend_id, $done_or_not);
                 $notification->execute();
                 while ($notification->fetch()) {
                     if ($done_or_not == 0) {
@@ -77,6 +77,7 @@
                         } else {
                             $songNotifyOne['id'] = $id;
                             $songNotifyOne['friendId'] = $user_id;
+                            $songNotifyOne['songName'] = $song_name;
                             $songNotifyOne['url'] = $notify;
                             $this->songNotify[] =  $songNotifyOne;
                             $j++;
@@ -121,6 +122,7 @@
                 for ($i=0; $i<$countedSongNotifications; $i++) {
                     $profileImage = notifications::getUserInformation($this->songNotify[$i]['friendId'])[0]['username'].'.jpg';
                     $songUrl = $this->songNotify[$i]['url'];
+                    $songName = $this->songNotify[$i]['songName'];
                     $id = $this->songNotify[$i]['id'];
                 
                       echo '
@@ -132,10 +134,13 @@
                                 echo '<img src="profileImages/anonymous.jpg" class="img-polaroid"></div>';
                             }
                     
-                        echo '<h6 class="pull-left songUsername"><small>';
+                        echo '<h6 class="pull-left songUsername"><small>Kasutajanimi: ';
                         echo notifications::getUserInformation($this->songNotify[$i]['friendId'])[0]['username'];
-                        echo '</small></h6>
-                            <div id="buttons" class="pull-right input-append">
+                        echo '</small></h6><br /><h3><small class="songName pull-left">';
+                        echo $songName;
+                        echo '</h3></small><br />
+                            
+                            <div id="buttons" class="pull-left input-append">
                                 <button class="btn kuula" id="kuula" value="'.$songUrl.'">Kuula</button>
                                 <button class="btn eemalda" id="eemalda" value="'.$id.'">Eemalda</button>
                             </div></div>';

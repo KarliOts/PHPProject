@@ -43,7 +43,7 @@
               <li class="tuttavad" ><a href="index.php?leht=tuttavad" target="_self">Tuttavad</a></li>
               <li class="teadaanded" >
                   <a href="index.php?leht=teadaanded&valik=koik" target="_self">Teadaanded
-                    <span class="badge">
+                    <span class="badge badge-info">
                         <?=$countUserData->countUserNotifications();?>
                     </span>
                   </a>
