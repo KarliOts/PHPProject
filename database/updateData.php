@@ -6,7 +6,6 @@
 
 		//setting user entered values to variables
 		private $_USERNAME;
-		private $_PASSWORD;
 		private $_FIRSTNAME;
 		private $_EMAIL;
 		private $_LASTNAME;
@@ -43,9 +42,6 @@
 
 		//check if user entered information is valid
 		public function validateInformation () {
-			if (strlen($this->_USERNAME) < 6 || strlen($this->_USERNAME) > 20) {
-				updateDatabaseInformation::returnMessage('Kasutajanimi peab olema vahemikus 6 - 20 tähemärki! ');
-			}
 
 			if (!preg_match('/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*(\.[a-z]{2,3})$/', $this->_EMAIL)) {
 				updateDatabaseInformation::returnMessage("vale email! ");
@@ -74,7 +70,7 @@
 
 		//logged in user have seen frien request
 		public function seenFriendRequest ($friendId) {
-			$updateRequest = $this->_CONNECTION->prepare("UPDATE notifications SET done_or_not=1 WHERE user_id='$friendId' AND friend_id='$this->_LOGGED_IN_USER' AND notification='FRIEND'")or die(mysql_error());
+			$updateRequest = $this->_CONNECTION->prepare("UPDATE notifications SET done_or_not=1 WHERE user_id='$friendId' AND friend_id='$this->_LOGGED_IN_USER' AND recommendation='FRIEND'")or die('mingisugune viga');
 			$updateRequest->execute();
 		}
 
@@ -84,6 +80,18 @@
 			$addUser->execute();
 			updateDatabaseInformation::returnMessage('Lisatud tuttavate listi!');
 		}
+                //deleting music notification
+                public function deleteMusicNotification ($id) {
+                    $deleteMusicNotification = $this->_CONNECTION->prepare("DELETE FROM notifications WHERE id='$id'");
+                    $deleteMusicNotification->execute();
+                    updateDatabaseInformation::returnMessage('Eemaldatud');
+                }
+                
+                //deleting user from friends list
+                public function deleteUserFromFriendsList ($friendId) {
+                    $deleteFriend = $this->_CONNECTION->prepare("DELETE FROM friends WHERE user_id='$this->_LOGGED_IN_USER' AND friend_id='$friendId'");
+                    $deleteFriend->execute(); 
+                }
 
 		//closing database connection
 		public function closeConnection () {
@@ -113,6 +121,17 @@
 			$updateDatabaseInformation->seenFriendRequest($_POST['friendId']);
 			$updateDatabaseInformation->addUserToFriendList($_POST['friendId']);
 			$updateDatabaseInformation->closeConnection();
-		}
-	}
+                } else if ($_POST['notify'] == 'removeSong') {
+                        $updateDatabaseInformation->buildConnection();
+                        $updateDatabaseInformation->deleteMusicNotification($_POST['songId']);
+                        $updateDatabaseInformation->closeConnection();
+                }
+        } 
+        if (isset($_POST['choice'])) {
+            if ($_POST['choice'] == 'unfriend') {
+                $updateDatabaseInformation->buildConnection();
+                $updateDatabaseInformation->deleteUserFromFriendsList($_POST['friendId']);
+                $updateDatabaseInformation->closeConnection();
+            }
+        }
 ?>

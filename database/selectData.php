@@ -168,7 +168,7 @@ class databaseConnection {
 	//selects all logged in user added "Listen later songs" max 5 songs per user
 	public function userListenLaterSongs(){
 		$listenlater = $this->connect->prepare("SELECT * FROM listenlater WHERE user_id='$this->loginUserID'");
-		$listenlater->bind_result($id, $user_id, $song_id);
+		$listenlater->bind_result($id, $user_id, $song_name, $song_id);
 		$listenlater->execute();
 		$laterSongs = array();
 		$selectAllLaterSongs = array();

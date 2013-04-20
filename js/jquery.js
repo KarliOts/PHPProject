@@ -8,7 +8,7 @@ $(document).ready(function(){
 			$('.kinnita').click(function(){
 				friendId = $(this).val();
 				$.post('database/updateData.php', {friendId: friendId, notify: 'accept'}, function(data){
-					alert(data);
+					window.location.reload();
 				});
 			});
 
@@ -27,15 +27,31 @@ $(document).ready(function(){
                         
 			//removing recocommended song from database
 			$('.eemalda').click(function(){
-				songUrl = $(this).val();
-				/*$.post('database/youtubeVid.php', {songUrl: songUrl}, function(data){
-					alert(data);
-				});*/
+				songId = $(this).val();
+				$.post('database/updateData.php', {songId: songId, notify: 'removeSong'}, function(data){
+					window.location.reload();
+				});
 			});
 
 	//profiili lehel input-ide tooltip
 	$('.triggerPopover').tooltip({'trigger':'focus', 'placement': 'right'});
-
+        
+        //adding friend to logged in user
+        $('.lisa_s6braks').click(function(){
+            friendId = $(this).val();
+            $(this).text('lisatud').attr('disabled','disabled');
+            $.post('database/insertData.php', {friendId : friendId, choice: 'friend'});
+        });
+        
+        //removing friend from friends list
+        $('.eemalda_s6ber').click(function(){
+            friendId = $(this).val();
+            $(this).text('eemaldatud :( :( ').attr('disabled','disabled');
+            $.post('database/updateData.php', {friendId : friendId, choice: 'unfriend'}, function(data){
+                window.location.reload();
+            });
+        });
+        
 	//profiili lehe formi andmete uuendamine
 	$('#update').click(function(){
 		$('.updateError').hide();
@@ -58,11 +74,6 @@ $(document).ready(function(){
 			});
 		return false;
 	});
-
-	//adding class named active to link that-s active right now
-	praeguneLeht = $(location).attr('href');
-	asukoht = praeguneLeht.split('=');
-	$('.' + asukoht[1]).addClass('active');
 	
 	/*youtubest otsitud laulu peale vajutades saadav laulu urli teisele lehele ja tagastab iframe koos youtube embed videoga millel on
 	autoplay võrdne 1-ga, mis tähendab seda, et laul hakkab automaatselt mängima*/
@@ -93,12 +104,7 @@ $(document).ready(function(){
 	});
 
 	//otsib andmebaasist nupuvajutuse peale kasutajaid ja uuendab tabelit reaalajas
-	$('#tuttavaNimi').keyup(function(e) {
-		tuttavaNimi = $('#tuttavaNimi').val();
-		$.post('subPages/otsiTuttavat.php', {tuttavaNimi: tuttavaNimi}, function(nimed){
-			$('.otsiTuttavad').html(nimed);
-		});
-	});
+	
 
 	//peamenüü navigatsioon
 	$('.headMenu').click(function(){

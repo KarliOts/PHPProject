@@ -30,7 +30,7 @@ class insertingDataToDatabase {
 	//adding friend to logged in user
 	public function addFriend($friendId){
 		$insertFriend = $this->connect->prepare("INSERT INTO friends (user_id,friend_id)VALUES('$this->loginUserID','$friendId')");
-		//$insertFriend->execute();
+		$insertFriend->execute();
 	}
 
 	//adding song to logged is users selected plalist
@@ -43,9 +43,9 @@ class insertingDataToDatabase {
 	public function addVideoToListenLater($songUrl){
 		$insertVideoToListenLater = $this->connect->prepare("INSERT INTO listenlater (user_id, song_url)VALUES($this->loginUserID, '$songUrl')");
 		$insertVideoToListenLater->execute();
-	}
+        }
 
-	//closing database connection
+        //closing database connection
 	public function closeDatabaseConnection(){
 		$this->connect->close();
 	}
@@ -65,11 +65,13 @@ if (isset($_POST['choice'])) {
 		$insertData->addSongToPlaylist($_POST['playlistId'], $_POST['videoUrl']);
 		$insertData->closeDatabaseConnection();
 	} else if ($TODO == 'recommend') {
-		echo $_POST['videoUrl'];
+		
 	} else if ($TODO == 'later') {
 		$insertData->addVideoToListenLater($_POST['videoUrl']);
 		$insertData->closeDatabaseConnection();
-	} else {
+        } else if ($TODO == 'friend') {
+                $insertData->addFriend($_POST['friendId']);
+        } else {
 		header('Location: ../index.php');
 	}
 }

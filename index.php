@@ -41,7 +41,13 @@
             <ul class="nav">
               <li class="playlistid"><a href="index.php?leht=playlistid" target="_self">Playlistid</a></li>
               <li class="tuttavad" ><a href="index.php?leht=tuttavad" target="_self">Tuttavad</a></li>
-              <li class="teadaanded" ><a href="index.php?leht=teadaanded" target="_self">Teadaanded</a></li>
+              <li class="teadaanded" >
+                  <a href="index.php?leht=teadaanded&valik=koik" target="_self">Teadaanded
+                    <span class="badge">
+                        <?=$countUserData->countUserNotifications();?>
+                    </span>
+                  </a>
+              </li>
               <li class="hiljem" ><a href="index.php?leht=hiljem" target="_self">Kuula hiljem</a></li>
               <li class="profiil" >
                 <a href="index.php?leht=profiil">

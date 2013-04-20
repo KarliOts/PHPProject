@@ -10,7 +10,6 @@
 	$.post('database/insertData.php', {choice: 'recommend', videoUrl: videoUrl}, function(success){
 		alert(success);
 	});
-
     });
 //lisab laulu hiljem kuulatavate laulude list
     $('.listenLater').click(function(){
@@ -51,7 +50,7 @@
 	//meanwhile checking if playlist is full
 	echo '
 		<div class="input-append showPlaylists">
-			<span class="add-on">Playlistid</span>';
+			<span class="add-on">Lisa: </span>';
 			for ($i=0; $i<3; $i++) { 
 				$disabled = ''; 
 				$red = '';
